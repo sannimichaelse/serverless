@@ -9,7 +9,8 @@ export const uploadToS3 = async (event: any) => {
     secretAccessKey: process.env.SPOKE_AWS_SECRET_ACCESS_KEY,
   });
 
-  let key = `${event.body.lastname}-${event.body.firstname}.json`
+  const { lastname, firstname } = JSON.parse(event.body)
+  let key = `${lastname}-${firstname}.json`
   const params = {
     Bucket: process.env.BUCKET,
     Key: key,
