@@ -14,7 +14,7 @@ export const uploadToS3 = async (event: any) => {
   const params = {
     Bucket: process.env.BUCKET,
     Key: key,
-    Body: JSON.stringify(event.body),
+    Body: event.body,
     ContentType: "application/json",
     ACL: "public-read",
   };
