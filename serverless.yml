@@ -11,17 +11,20 @@ plugins:
 provider:
   name: aws
   runtime: nodejs14.x
-  region: us-east-11 # North Virgina
-  stage: development
+  region: us-west-1 # North California
+  stage: dev
 
 functions:
   s3-webhook:
     handler: handler.s3WebhookHandler
     name: s3-webhook
     description: Webhook for S3 Bucket
+    memorySize: 2048
     environment:
       BUCKET: ${env:BUCKET}
-      NODE_ENV: development
+      SPOKE_AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
+      SPOKE_AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+      NODE_ENV: dev
     events:
       - http:
           path: webhook/s3

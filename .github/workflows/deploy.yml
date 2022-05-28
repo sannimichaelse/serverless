@@ -21,17 +21,19 @@ jobs:
         run: npm install serverless-plugin-optimize --save-dev
 
       - name: Install Dependencies
-        working-directory: ./src/bucket
+        working-directory: ./src
         run: npm install
 
       - name: Build Webhook
-        working-directory: ./src/bucket
+        working-directory: ./src
         run: npm run build
 
       - name: Set Environment Variables
         run: |
           touch .env
           echo "BUCKET=${{secrets.BUCKET}}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{secrets.AWS_ACCESS_KEY_ID}}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{secrets.AWS_SECRET_ACCESS_KEY}}" >> .env
 
       - name: deploy
         run: |

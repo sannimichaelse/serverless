@@ -1,43 +1,47 @@
-import { S3 } from "aws-sdk";
-import { getBoundary, Parse } from "parse-multipart";
+import * as AWS from "aws-sdk";
 
-const BUCKET = process.env.BUCKET;
+export const uploadToS3 = async (event: any) => {
+  const s3 = new AWS.S3();
 
-const s3 = new S3();
+  AWS.config.update({
+    region: "us-west-1",
+    accessKeyId: process.env.SPOKE_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.SPOKE_AWS_SECRET_ACCESS_KEY,
+  });
 
-const extractFile = (event: any) => {
-  const boundary = getBoundary(event.headers["content-type"]);
-  const parts = Parse(Buffer.from(event.body, "base64"), boundary);
-  const [{ filename, data }] = parts;
-
-  return {
-    filename,
-    data,
+  const buffer = Buffer.from(JSON.stringify(event.body));
+  const params = {
+    Bucket: process.env.BUCKET,
+    Key: "spokespeople.json",
+    Body: buffer,
+    ContentType: "application/json",
+    ACL: "public-read",
   };
+
+  return new Promise((resolve, reject) => {
+    s3.putObject(params, (err: any, data: any) => {
+      if (err) {
+        return resolve({
+          statusCode: 500,
+          body: JSON.stringify({ message: err.stack }),
+        });
+      } else {
+        return reject({
+          statusCode: 200,
+          body: "Upload Successfull",
+        });
+      }
+    });
+  })
 };
 
 export async function handler(event: any) {
-  try {
-    const { filename, data } = extractFile(event);
-    await s3
-      .putObject({
-        Bucket: BUCKET,
-        Key: filename,
-        ACL: "public-read",
-        Body: data,
-      })
-      .promise();
-
+  if (event.httpMethod === "GET") {
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        link: `https://${BUCKET}.s3.amazonaws.com/${filename}`,
-      }),
-    };
-  } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ message: err.stack }),
+      body: "Welcome to serverless",
     };
   }
+
+  return uploadToS3(event);
 }
