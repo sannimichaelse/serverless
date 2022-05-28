@@ -1,0 +1,39 @@
+name: Github Actions CI
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install serverless CLI
+        run: npm install -g serverless
+
+      - name: Install Serverless Plugin to optimize deployments
+        run: npm install serverless-plugin-optimize --save-dev
+
+      - name: Install Dependencies
+        working-directory: ./src/bucket
+        run: npm install
+
+      - name: Build Webhook
+        working-directory: ./src/bucket
+        run: npm run build
+
+      - name: Set Environment Variables
+        run: |
+          touch .env
+          echo "BUCKET=${{secrets.BUCKET}}" >> .env
+
+      - name: deploy
+        run: |
+          serverless config credentials --provider aws --key ${{secrets.AWS_ACCESS_KEY_ID}} --secret ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          serverless deploy

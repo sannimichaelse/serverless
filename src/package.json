@@ -1,0 +1,20 @@
+{
+  "name": "serverless",
+  "version": "1.0.0",
+  "description": "lambda function",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "author": "Michael Sanni",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1145.0",
+    "parse-multipart": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.36",
+    "@types/parse-multipart": "^1.0.0"
+  }
+}

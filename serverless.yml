@@ -1,0 +1,31 @@
+service: softsignatureslab
+
+useDotenv: true
+
+package:
+  individually: true # Set your packages to be built individually to have smaller packages:
+
+plugins:
+  - serverless-plugin-optimize # Drastically improve the size of the code and optimize lamda functions
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-11 # North Virgina
+  stage: development
+
+functions:
+  s3-webhook:
+    handler: handler.s3WebhookHandler
+    name: s3-webhook
+    description: Webhook for S3 Bucket
+    environment:
+      BUCKET: ${env:BUCKET}
+      NODE_ENV: development
+    events:
+      - http:
+          path: webhook/s3
+          method: post
+      - http:
+          path: webhook/s3
+          method: get
