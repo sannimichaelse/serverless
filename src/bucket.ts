@@ -9,7 +9,7 @@ export const uploadToS3 = async (event: any) => {
     secretAccessKey: process.env.SPOKE_AWS_SECRET_ACCESS_KEY,
   });
 
-  const buffer = Buffer.from(JSON.stringify(event.body));
+  const buffer = Buffer.from(event.body);
   const params = {
     Bucket: process.env.BUCKET,
     Key: "spokespeople.json",

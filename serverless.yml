@@ -19,7 +19,6 @@ functions:
     handler: handler.s3WebhookHandler
     name: s3-webhook
     description: Webhook for S3 Bucket
-    memorySize: 2048
     environment:
       BUCKET: ${env:BUCKET}
       SPOKE_AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
