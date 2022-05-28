@@ -21,12 +21,13 @@ export const uploadToS3 = async (event: any) => {
   return new Promise((resolve, reject) => {
     s3.putObject(params, (err: any, data: any) => {
       if (err) {
-        return resolve({
+        console.log(err)
+        return reject({
           statusCode: 500,
           body: JSON.stringify({ message: err.stack }),
         });
       } else {
-        return reject({
+        return resolve({
           statusCode: 200,
           body: "Upload Successfull",
         });
