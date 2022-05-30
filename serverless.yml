@@ -3,10 +3,10 @@ service: softsignatureslab
 useDotenv: true
 
 package:
-  individually: true # Set your packages to be built individually to have smaller packages:
+  individually: true 
 
 plugins:
-  - serverless-plugin-optimize # Drastically improve the size of the code and optimize lamda functions
+  - serverless-plugin-optimize 
 
 provider:
   name: aws
